@@ -1,6 +1,6 @@
 import { url_link } from "./api_url.cy";
 
-describe("TASK", () => {
+describe("List Users", () => {
   it("should return status code 200", () => {
     cy.request({
       method: "GET",
