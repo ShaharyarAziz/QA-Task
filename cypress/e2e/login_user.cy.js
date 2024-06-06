@@ -11,6 +11,7 @@ describe("Positive Test Cases Login", () => {
       expect(response.status).to.equal(200);
       expect(response.body).to.have.property("token");
     });
+    
   });
 
   it("should return a valid token on successful login", () => {
@@ -100,3 +101,126 @@ describe("Positive Test Cases Login", () => {
     });
   });
 });
+describe("Negative Test Cases for Login", () => {
+    it("should return status code 400 for missing password", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/login",
+        body: {
+          email: "eve.holt@reqres.in",
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(400);
+        expect(response.body).to.have.property("error");
+        expect(response.body.error).to.equal("Missing password");
+      });
+    });
+  
+    it("should return status code 400 for missing email", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/login",
+        body: {
+          password: "cityslicka",
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(400);
+        expect(response.body).to.have.property("error");
+        expect(response.body.error).to.equal("Missing email or username");
+      });
+    });
+  
+    it("should return status code 400 for invalid email format", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/login",
+        body: {
+          email: "notanemail",
+          password: "cityslicka",
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(400);
+        expect(response.body).to.have.property("error");
+        expect(response.body.error).to.equal("user not found");
+      });
+    });
+  
+    it("should return status code 400 for incorrect password", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/login",
+        body: {
+          email: "eve.holt@reqres.in",
+          password: "wrongpassword",
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(400);
+        expect(response.body).to.have.property("error");
+        expect(response.body.error).to.equal("user not found");
+      });
+    });
+  
+    it("should return status code 400 for non-existent user", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/login",
+        body: {
+          email: "nonexistent@reqres.in",
+          password: "cityslicka",
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(400);
+        expect(response.body).to.have.property("error");
+        expect(response.body.error).to.equal("user not found");
+      });
+    });
+  
+    it("should return status code 400 for empty request body", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/login",
+        body: {},
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(400);
+        expect(response.body).to.have.property("error");
+        expect(response.body.error).to.equal("Missing email or username");
+      });
+    });
+  
+    it("should return status code 400 for request with only spaces", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/login",
+        body: {
+          email: "   ",
+          password: "   ",
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(400);
+        expect(response.body).to.have.property("error");
+        expect(response.body.error).to.equal("user not found");
+      });
+    });
+  
+    it("should return status code 404 for incorrect URL", () => {
+      cy.request({
+        method: "POST",
+        url: "https://reqres.in/api/loginn", // Incorrect URL
+        body: {
+          email: "eve.holt@reqres.in",
+          password: "cityslicka",
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(404);
+      });
+    });
+  });
+  

@@ -7,6 +7,7 @@ describe("Positive Test Cases for Single User", () => {
       cy.log(response);
       expect(response.status).to.equal(200);
     });
+    cy.screenshot()
   });
   it("should return response within acceptable time", () => {
     cy.request({
