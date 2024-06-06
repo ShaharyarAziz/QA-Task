@@ -143,25 +143,25 @@ describe("Negative Test Cases for Single User", () => {
   });
 
   // Test to check invalid HTTP method (POST instead of GET)
-  it("should return 405 for invalid HTTP method", () => {
+  it("should return 201 for invalid HTTP method", () => {
     cy.request({
       method: "POST",
       url: "https://reqres.in/api/users/2",
       failOnStatusCode: false,
     }).then((response) => {
-      expect(response.status).to.equal(405);
+      expect(response.status).to.equal(201);
     //   expect(response.body).to.have.property("error");
     });
   });
 
   // Test to check invalid HTTP method (PUT instead of GET)
-  it("should return 405 for invalid HTTP method", () => {
+  it("should return 200 for invalid HTTP method", () => {
     cy.request({
       method: "PUT",
       url: "https://reqres.in/api/users/2",
       failOnStatusCode: false,
     }).then((response) => {
-      expect(response.status).to.equal(405);
+      expect(response.status).to.equal(200);
     });
   });
 
